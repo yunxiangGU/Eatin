@@ -9,6 +9,12 @@ scalaVersion := "2.13.8"
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "5.0.0" % Test
+libraryDependencies ++= Seq(
+  "mysql" % "mysql-connector-java" % "8.0.25",
+  "com.typesafe.play" %% "play-slick" % "5.0.0",
+  "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
+  "com.h2database" % "h2" % "1.4.199",
+)
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "org.eatin.controllers._"
