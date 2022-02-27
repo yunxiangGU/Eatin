@@ -94,8 +94,8 @@ Read:
 
 ### OpenHoursRepository:
 - addOpenHours
-- searchOpenHoursByRestId
-###ReservationRepository:  
+- searchOpenHoursByRestId  
+### ReservationRepository:  
 Write:  
 - insertReservation: insertReservation to table
 - cancelReservation: status=0
