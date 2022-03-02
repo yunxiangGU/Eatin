@@ -1,7 +1,7 @@
 # Eatin
 IT5100A Course Project
 
-##Database:
+## Database:
 
 
 1. User
@@ -92,10 +92,10 @@ Read:
 - searchRestaurantByAddress
 - searchRestaurantByType
 
-###OpenHoursRepository:
+### OpenHoursRepository:
 - addOpenHours
-- searchOpenHoursByRestId
-###ReservationRepository:  
+- searchOpenHoursByRestId  
+### ReservationRepository:  
 Write:  
 - insertReservation: insertReservation to table
 - cancelReservation: status=0
