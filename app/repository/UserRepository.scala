@@ -48,10 +48,31 @@ class UserRepository @Inject()(implicit ex: ExecutionContext){
         ) += (username, password, email, userType)
     }
   }
-  // val updateCountryAction = playerTable.filter(_.id === 500L).map(_.country).update("Germany")
-  def updatePassword(userid: Long, newPassword: String) = {
+  def updatePassword(userid: Long, newPassword: String):Future[Int] = {
     db.run{
       userQuery.filter(_.userid === userid).map(_.password).update(newPassword)
+    }
+  }
+  def updateEmail(userid: Long, newEmail: String): Future[Int] = {
+    db.run {
+      userQuery.filter(_.userid === userid).map(_.email).update(newEmail)
+    }
+  }
+  def searchUserById(userid: Long): Future[Option[User]] = {
+    db.run {
+      userQuery.filter(_.userid === userid).result.map( uSet =>
+        uSet.headOption.map(
+          u => User(u.userId, u.username, u.password, u.email, u.userType)
+        )
+      )
+    }
+  }
+  def searchUserByUsername(username: String): Future[Option[User]] = {
+    db.run {
+      userQuery.filter(_.username like username).result.map(uSet =>
+      uSet.headOption.map(
+        u => User(u.userId, u.username, u.password, u.email, u.userType)
+      ))
     }
   }
 }

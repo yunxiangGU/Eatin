@@ -33,7 +33,7 @@ class UserRepositoryTest extends MySQLRepoSpec {
       val result: User = Await.result(userRepo.addUser(
         "yifan", "123", "gmail", "admin")
         , Duration(60, SECONDS))
-      result.userType should equal("admin")
+      assert(result.email == "gmail")
     }
   }
 

@@ -5,11 +5,11 @@ import play.api.libs.json.Json
 case class Restaurant(
                      restId: Long,
                      userid: Long,
+                     openId: Long,
                      name: String,
                      desc: String,
                      address: String,
                      phone: String,
-                     openId: Long,
                      tables: Int,
                      restType: String
                      )

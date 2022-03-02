@@ -9,7 +9,7 @@ IT5100A Course Project
 ```sql
 CREATE TABLE `eatin`.`user` (
   `userid` INT NOT NULL,
-  `username` VARCHAR(45) NOT NULL,
+  `username` VARCHAR(45) UNIQUE NOT NULL,
   `password` VARCHAR(45) NULL,
   `email` VARCHAR(45) NULL,
   `type` VARCHAR(45) NULL,
@@ -63,7 +63,7 @@ CREATE TABLE `eatin`.`reservation` (
   `datetime` DATETIME NOT NULL,
   `rest_id` INT NOT NULL,
   `userid` INT NOT NULL,
-  `duration` TIME NOT NULL DEFAULT '01:00:00',
+  `duration` INT NOT NULL DEFAULT 1,
   `status` TINYINT NOT NULL, 
   PRIMARY KEY (`reserve_id`, `date`, `rest_id`, `userid`));
 
