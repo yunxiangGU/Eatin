@@ -99,7 +99,7 @@ class RestaurantRepository @Inject()(configProvider: DatabaseConfigProvider)(imp
   }
   def searchByName(name: String): Future[List[Restaurant]] = {
     db.run {
-      restQuery.filter(_.name.toLowerCase like s".*${name}.*".toLowerCase()).take(5).result.map {
+      restQuery.filter(_.name.toLowerCase like s"%${name}%".toLowerCase()).take(5).result.map {
           _.toList
         }
     }
@@ -107,13 +107,13 @@ class RestaurantRepository @Inject()(configProvider: DatabaseConfigProvider)(imp
 
   def searchByAddress(address: String): Future[List[Restaurant]] = {
     db.run {
-      restQuery.filter(_.address.toLowerCase like s".*${address}.*".toLowerCase() ).result.map(_.toList)
+      restQuery.filter(_.address.toLowerCase like s"%${address}%".toLowerCase() ).result.map(_.toList)
     }
   }
 
   def searchByType(restType: String): Future[List[Restaurant]] = {
     db.run {
-      restQuery.filter(_.restType.toLowerCase like s".*${restType}.*".toLowerCase() ).result.map(_.toList)
+      restQuery.filter(_.restType.toLowerCase like s"%${restType}%".toLowerCase() ).result.map(_.toList)
     }
   }
   def close(): Future[Unit] = {

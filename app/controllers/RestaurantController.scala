@@ -74,6 +74,7 @@ class RestaurantController @Inject() (val restaurantRepository: RestaurantReposi
    * @return
    */
   def searchRestaurantByName(name: String): Action[AnyContent] = { Action.async { request =>
+    println(name)
     restaurantRepository.searchByName(name).flatMap {
       restList => Future.successful(Ok(JsonUtil.toJson(restList)))
     }.recover {
@@ -109,6 +110,7 @@ class RestaurantController @Inject() (val restaurantRepository: RestaurantReposi
    * @return
    */
   def searchRestaurantGenerally(keyword: String): Action[AnyContent] = {Action.async { request =>
+    println(keyword)
     for {
       nameList <- restaurantRepository.searchByName(keyword)
       addressList <- restaurantRepository.searchByAddress(keyword)
