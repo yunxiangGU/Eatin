@@ -24,7 +24,7 @@ class RestaurantController @Inject() (val restaurantRepository: RestaurantReposi
     request.userid.flatMap {
       userid =>
         val reqJson = request.body.asJson
-          .getOrElse(throw new IllegalArgumentException("illegal request for login"))
+          .getOrElse(throw new IllegalArgumentException("illegal request for add restaurant"))
         val addReq = reqJson.asOpt[AddRestReq].getOrElse(throw new IllegalArgumentException("illegal request for login"))
         openHoursRepo.addOpenHours(addReq.lunch, addReq.dinner, addReq.lStart, addReq.lEnd, addReq.dStart, addReq.dEnd).flatMap { oh =>
           val openId = oh.openId
@@ -44,7 +44,6 @@ class RestaurantController @Inject() (val restaurantRepository: RestaurantReposi
 
   def getRestList: Action[AnyContent] = { Action.async { request =>
     restaurantRepository.getRestList.flatMap { list =>
-      restaurantRepository.close()
       Future.successful(Ok(JsonUtil.toJson(list)))
     }
   }

@@ -3,14 +3,14 @@ package repository
 import models.Restaurant
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
-
+import play.api.db.slick.DatabaseConfigProvider
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RestaurantRepository @Inject()(implicit ex: ExecutionContext) {
-  private val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfig.forConfig[JdbcProfile]("mydb")
-
+class RestaurantRepository @Inject()(configProvider: DatabaseConfigProvider)(implicit ex: ExecutionContext) {
+  //private val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfig.forConfig[JdbcProfile]("mydb")
+  private val dbConfig: DatabaseConfig[JdbcProfile] = configProvider.get[JdbcProfile]
   import dbConfig._
   import profile.api._ // brings slick DSL
 
@@ -114,12 +114,14 @@ searchRestaurantByType
   }
 
   def searchByType(restType: String): Future[Option[Restaurant]] = {
-    db.run {
+    val res = db.run {
       restQuery.filter(_.restType like s".*${restType}.*" ).result.map( rSet =>
         rSet.headOption.map(
           r => Restaurant(r.restId, r.userid, r.openId, r.name, r.desc, r.address, r.phone, r.tables, r.restType)
         ))
     }
+    db.close()
+    res
   }
   def close(): Future[Unit] = {
     Future.successful(db.close())

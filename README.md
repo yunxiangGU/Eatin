@@ -8,7 +8,7 @@ IT5100A Course Project
 
 ```sql
 CREATE TABLE `eatin`.`user` (
-  `userid` INT NOT NULL,
+  `userid` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(45) UNIQUE NOT NULL,
   `password` VARCHAR(45) NULL,
   `email` VARCHAR(45) NULL,
@@ -104,7 +104,14 @@ Read:
 - searchReservationByUserid
 - searchReservationByRestId
 - searchReservationByDatetime
-- checkAvailability: count(start_time<=x && end_time>=x && status=1) < tables
+- checkAvailability: 
+```
+count(start_time<=x && end_time>=x && status=1) < tables // exist empty table(s)
+&&
+openhours.lunchStart <= x < openHours.lunchEnd || openhours.dinnerStart <= x < openHhours.dinnerEnd
+// in restaurant open hours
+```
+
 
 ## Service
 ### ReservationService:
@@ -118,4 +125,95 @@ Read:
 - if enough time: batch addReservation from csv file for restaurants with their own service/database
 
 ## Controller
-### TODO
+#### BackEnd API:
+##### Sign up: 
+- path: /signup
+- method: POST
+- Json body: {"username": "abc", "password":"123", "email":"abc@gmail.com"}
+- Success response: "success"
+
+##### Login:
+- path: /login
+- method: POST
+- request Json body: {"username":"abc", "password":"123"}
+- Success response: "success"
+- Incorrect username/password: "incorrect username/password"
+##### logout
+- path: /logout
+- method: POST
+- "logout success"
+
+##### updatePassword
+- path: /updatePassword
+- Need Auth session
+- method: POST
+- request Json body: {"oldPassword":"123", "newPassword":"456"}
+- "success"
+
+##### createRestaurant
+- path: /addRest
+- Need Auth session
+- method: POST
+- request Json body: 
+```json
+{
+    "name": "happy family",
+    "desc": "Asian food for family gathering",
+    "address": "388 PeekWay",
+    "phone":"86259087",
+    "lunch": true,
+    "lStart": "11:00",
+    "lEnd": "14:00",
+    "dinner": true,
+    "dStart": "15:00",
+    "dEnd": "20:00",
+    "tables":20,
+    "restType":"Asian"
+    }
+```
+- response Json if success
+```json
+{"restId":2,
+  "userid":4,
+  "openId":2,
+  "name":"happy family",
+  "desc":"Asian food for family gathering",
+  "address":"388 PeekWay",
+  "phone":"86259087",
+  "tables":20,
+  "restType":"Asian"}
+```
+##### get Restaurant List
+- path: /getRestList
+- method: GET
+- response is 10(or less than 10) restaurant information list
+- response sample Json:
+```json
+[{"restId":1,"userid":1,"openId":1,"name":"wokhey","desc":"goodrice","address":"clementi","phone":"12345678","tables":2,"restType":"asian"},
+  {"restId":2,"userid":4,"openId":2,"name":"happy family","desc":"Asian food for family gathering","address":"388 PeekWay","phone":"86259087","tables":20,"restType":"Asian"}]
+```
+
+##### Check Availability
+- path: /check
+- method: POST
+- Need Auth session (TBD)
+- request Json body:
+```json
+{
+    "restId": 1,
+    "datetime":"2022-2-22 12:00:00"
+}
+```
+- response: true or false
+
+##### Make Reservation
+- path: /addRest
+- method: POST
+- need Auth
+- request Json body:
+```json
+{
+    "restId": 1,
+    "datetime":"2022-3-22 12:00:00"
+}
+```

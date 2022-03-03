@@ -9,6 +9,7 @@ GET     /                           controllers.HomeController.index()
 POST     /login                     controllers.UserController.login()
 POST     /updatePassword             controllers.UserController.updatePassword()
 POST     /signup                      controllers.UserController.signUp()
+POST     /logout                     controllers.UserControllers.logout()
 +nocsrf
 POST     /booking                     controllers.ReservationController.makeReservation()
 +nocsrf

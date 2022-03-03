@@ -29,7 +29,7 @@ class UserController @Inject() (val userRepository: UserRepository,
             Future.successful(Ok("success")
               .withSession((SESSION_TOKEN_NAME, u.get.userId.toString)))
           } else {
-            Future.successful(Ok("incorrect userid/password"))
+            Future.successful(Ok("incorrect username/password"))
           }
         }
       } catch {
@@ -48,12 +48,16 @@ class UserController @Inject() (val userRepository: UserRepository,
           val signUpReq = reqJson.asOpt[SignUpReq].getOrElse(throw new IllegalArgumentException("invalid format of username"))
           /* Assume front end jQuery only allow unique username */
           userRepository.addUser(signUpReq.username, signUpReq.password, signUpReq.email, "normal")
-          Future.successful(Ok("sign up success"))
+          Future.successful(Ok("success"))
+        }
+        catch {
+          case e: IllegalArgumentException => Future.successful(BadRequest(e.getMessage))
+          case t: Throwable => Future.successful(InternalServerError("uncaught error"))
         }
     }
   }
   def logout(): Action[AnyContent] = {Action { _ =>
-    Ok("logout successful!").withNewSession
+    Ok("logout success").withNewSession
   }}
 
     def updatePassword(): Action[AnyContent] = { authAction.async {
