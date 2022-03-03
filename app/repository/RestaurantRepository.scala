@@ -4,8 +4,10 @@ import models.Restaurant
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 import play.api.db.slick.DatabaseConfigProvider
+
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 @Singleton
 class RestaurantRepository @Inject()(configProvider: DatabaseConfigProvider)(implicit ex: ExecutionContext) {
@@ -49,15 +51,15 @@ class RestaurantRepository @Inject()(configProvider: DatabaseConfigProvider)(imp
   /**
    * Write:
 
-addRestaurant
-updateDesc
-updateName
-Read:
+    addRestaurant
+    updateDesc
+    updateName
+    Read:
 
-searchRestaurantById
-searchRestaurantByName
-searchRestaurantByAddress
-searchRestaurantByType
+    searchRestaurantById
+    searchRestaurantByName
+    searchRestaurantByAddress
+    searchRestaurantByType
    */
   def addRestaurant(userid: Long, openId: Long, name: String, desc: String, address: String, phone: String, tables: Int, restType: String): Future[Restaurant] = {
     db.run {
@@ -95,33 +97,24 @@ searchRestaurantByType
       ))
     }
   }
-  def searchByName(name: String): Future[Option[Restaurant]] = {
+  def searchByName(name: String): Future[List[Restaurant]] = {
     db.run {
-      restQuery.filter(_.name like s".*${name}.*" ).result.map( rSet =>
-        rSet.headOption.map(
-          r => Restaurant(r.restId, r.userid, r.openId, r.name, r.desc, r.address, r.phone, r.tables, r.restType)
-        ))
+      restQuery.filter(_.name.toLowerCase like s".*${name}.*".toLowerCase()).take(5).result.map {
+          _.toList
+        }
     }
   }
 
-  def searchByAddress(address: String): Future[Option[Restaurant]] = {
+  def searchByAddress(address: String): Future[List[Restaurant]] = {
     db.run {
-      restQuery.filter(_.address like s".*${address}.*" ).result.map( rSet =>
-        rSet.headOption.map(
-          r => Restaurant(r.restId, r.userid, r.openId, r.name, r.desc, r.address, r.phone, r.tables, r.restType)
-        ))
+      restQuery.filter(_.address.toLowerCase like s".*${address}.*".toLowerCase() ).result.map(_.toList)
     }
   }
 
-  def searchByType(restType: String): Future[Option[Restaurant]] = {
-    val res = db.run {
-      restQuery.filter(_.restType like s".*${restType}.*" ).result.map( rSet =>
-        rSet.headOption.map(
-          r => Restaurant(r.restId, r.userid, r.openId, r.name, r.desc, r.address, r.phone, r.tables, r.restType)
-        ))
+  def searchByType(restType: String): Future[List[Restaurant]] = {
+    db.run {
+      restQuery.filter(_.restType.toLowerCase like s".*${restType}.*".toLowerCase() ).result.map(_.toList)
     }
-    db.close()
-    res
   }
   def close(): Future[Unit] = {
     Future.successful(db.close())

@@ -1,6 +1,7 @@
 package repository
 
 import models.OpenHours
+import play.api.db.slick.DatabaseConfigProvider
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 import slick.lifted.ProvenShape
@@ -9,9 +10,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class OpenHoursRepository @Inject()(implicit ex: ExecutionContext) {
-  private val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfig.forConfig[JdbcProfile]("mydb")
-
+class OpenHoursRepository @Inject()(configProvider: DatabaseConfigProvider)(implicit ex: ExecutionContext) {
+  //private val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfig.forConfig[JdbcProfile]("mydb")
+  private val dbConfig: DatabaseConfig[JdbcProfile] = configProvider.get[JdbcProfile]
   import dbConfig._
   import profile.api._ // brings slick DSL
 

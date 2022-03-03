@@ -1,6 +1,7 @@
 package repository
 
 import models.Reservation
+import play.api.db.slick.DatabaseConfigProvider
 import slick.basic.DatabaseConfig
 import slick.jdbc.JdbcProfile
 
@@ -8,9 +9,9 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ReservationRepository @Inject()(implicit ex: ExecutionContext) {
-  private val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfig.forConfig[JdbcProfile]("mydb")
-
+class ReservationRepository @Inject()(configProvider: DatabaseConfigProvider)(implicit ex: ExecutionContext) {
+//  private val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfig.forConfig[JdbcProfile]("mydb")
+private val dbConfig: DatabaseConfig[JdbcProfile] = configProvider.get[JdbcProfile]
   import dbConfig._
   import profile.api._ // brings slick DSL
 
@@ -40,19 +41,6 @@ class ReservationRepository @Inject()(implicit ex: ExecutionContext) {
    */
   private val restQuery = TableQuery[ReservationTable]
 
-  /**
-   * Write:
-
-addReservation
-updateDesc
-updateName
-Read:
-
-searchReservationById
-searchReservationByName
-searchReservationByAddress
-searchReservationByType
-   */
   def addReservation(userid: Long, restId: Long, dateTime: String, duration: Int, status: Int): Future[Reservation] = {
     db.run {
       (restQuery.map(r => (r.datetime, r.restId, r.userid, r.duration, r.status))
@@ -93,7 +81,6 @@ searchReservationByType
         ))
     }
   }
-  // todo check avail should be inside service method which injecting 2 repo!!
   def countConflict(restId: Long, startTime: String): Future[Int] = {
     db.run {
       restQuery.filter(_.restId === restId).filter(_.datetime like startTime).length.result

@@ -10,6 +10,21 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.duration.{DAYS, Duration}
 import scala.concurrent.{ExecutionContext, Future}
 
+/**
+ * request case class to add a new restaurant
+ * @param name restaurant name
+ * @param desc restaurant description
+ * @param address restaurant address
+ * @param phone restaurant phone number
+ * @param lunch restaurant is open for lunch or not
+ * @param lStart time of lunch start e.g. 12:00:00
+ * @param lEnd time of lunch end e.g. 15:00:00
+ * @param dinner restaurant is open for dinner or not
+ * @param dStart time of dinner start
+ * @param dEnd time of dinner end
+ * @param tables number of tables in restaurant ( for online reservation)
+ * @param restType type of restaurant: like 'asian', 'chinese', 'japanese', 'western'
+ */
 case class AddRestReq(name: String, desc: String, address: String, phone: String, lunch: Boolean, lStart: String, lEnd: String, dinner: Boolean, dStart: String, dEnd: String, tables: Int, restType: String)
 
 @Singleton
@@ -42,12 +57,67 @@ class RestaurantController @Inject() (val restaurantRepository: RestaurantReposi
   }
   }
 
+  /**
+   * get restaurant list for display in home page
+   * @return
+   */
   def getRestList: Action[AnyContent] = { Action.async { request =>
     restaurantRepository.getRestList.flatMap { list =>
       Future.successful(Ok(JsonUtil.toJson(list)))
     }
   }
   }
+
+  /**
+   * support customised search
+   * @param name search by restaurant name
+   * @return
+   */
+  def searchRestaurantByName(name: String): Action[AnyContent] = { Action.async { request =>
+    restaurantRepository.searchByName(name).flatMap {
+      restList => Future.successful(Ok(JsonUtil.toJson(restList)))
+    }.recover {
+      case _: Throwable => InternalServerError("uncaught error")
+    }
+  }
+  }
+
+  /**
+   * support customized search by address
+   */
+  def searchRestaurantByAddress(address: String): Action[AnyContent] = {Action.async { request =>
+    restaurantRepository.searchByAddress(address).flatMap { restList =>
+      Future.successful(Ok(JsonUtil.toJson(restList)))
+    }.recover {
+      case _: Throwable => InternalServerError("uncaught error")
+    }
+  }
+  }
+
+  def searchRestaurantByRestType(restType: String): Action[AnyContent] = {Action.async { request =>
+    restaurantRepository.searchByType(restType).flatMap { restList =>
+      Future.successful(Ok(JsonUtil.toJson(restList)))
+    }.recover {
+      case _: Throwable => InternalServerError("uncaught error")
+    }
+  }
+  }
+
+  /**
+   * support general search: search by name, address, and type & combine the result
+   * @param keyword any related keyword
+   * @return
+   */
+  def searchRestaurantGenerally(keyword: String): Action[AnyContent] = {Action.async { request =>
+    for {
+      nameList <- restaurantRepository.searchByName(keyword)
+      addressList <- restaurantRepository.searchByAddress(keyword)
+      typeList <- restaurantRepository.searchByType(keyword)
+    } yield {
+      val res = nameList ++ addressList ++ typeList
+      Ok(JsonUtil.toJson(res))
+    }
+  }}
 
 
 }

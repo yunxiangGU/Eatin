@@ -10,8 +10,9 @@ import scala.concurrent.{ExecutionContext, Future}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class UserRepository @Inject()(implicit ex: ExecutionContext){
-  private val dbConfig : DatabaseConfig[JdbcProfile] = DatabaseConfig.forConfig[JdbcProfile]("mydb")
+class UserRepository @Inject()(configProvider: DatabaseConfigProvider)(implicit ex: ExecutionContext){
+//  private val dbConfig : DatabaseConfig[JdbcProfile] = DatabaseConfig.forConfig[JdbcProfile]("mydb")
+  private val dbConfig: DatabaseConfig[JdbcProfile] = configProvider.get[JdbcProfile]
   import dbConfig._
   import profile.api._ // brings slick DSL
 
