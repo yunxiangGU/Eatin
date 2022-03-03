@@ -33,7 +33,7 @@ trait MySQLRepoSpec  extends PlaySpec
         "mydb.db.driver" -> "com.mysql.jdbc.Driver",
         "mydb.db.url" -> "jdbc:mysql://127.0.0.1:3306/eatin?useSSL=false&",
         "mydb.db.user" -> "root",
-        "mydb.db.password" -> "lianzi89"
+        "mydb.db.password" -> "pass"
       ))
       .build()
 
