@@ -2,10 +2,11 @@ import logo from './assets/logo.svg';
 import calendar_icon from './assets/calendar_icon.svg';
 import person_icon from './assets/person_icon.svg';
 import './App.css';
-
+import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RestaurantCard from './RestaurantCard';
+import RestaurantList from './RestaurantList';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -51,24 +52,26 @@ function App() {
             placeholder='What to Eat?'
             onChange={(e) => setSearchKeyword(e.target.value)}
             style={{marginLeft: '50px', borderRadius: '10px', borderWidth: '0'}} />
-          <button className='body-search-button' onClick={searchRestaurant()}>Search</button>
+          <button className='body-search-button' onClick={() => searchRestaurant()}>Search</button>
         </div>
       </div>
       <div className='restaurants'>
-        <RestaurantCard />
-        <RestaurantCard />
-        <RestaurantCard />
-        <RestaurantCard />
-        <RestaurantCard />
+        <RestaurantList restaurants={restaurants}/>
       </div>
     </div>
   );
 
   function searchRestaurant() {
-    console.log("start date: ", startdate)
-    console.log("paxNumber: ", paxNumber)
-    console.log("searchKeyword: ", searchKeyword)
-    // send get request and res is list of restaurants, set as state
+    let endpoint = 'http://localhost:9000/search?keyword=' + searchKeyword
+    axios.get(endpoint)
+    .then(function (response) {
+      if (response.status == 200) {
+        setRestaurants(response.data);
+      }
+    })
+    .catch(function (error) {
+      console.log("sign in request failed with error: ", error);
+    });
   }
 }
 

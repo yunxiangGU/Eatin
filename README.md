@@ -217,3 +217,12 @@ openhours.lunchStart <= x < openHours.lunchEnd || openhours.dinnerStart <= x < o
     "datetime":"2022-3-22 12:00:00"
 }
 ```
+
+## UI run
+```shell
+npm install
+```
+
+```shell
+npm run start
+```

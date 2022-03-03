@@ -32,33 +32,30 @@ export default function SignUpPage() {
         placeholder='password'
         onChange={(e) => setPassword(e.target.value)}></input>
       <button className='sign-up-button' 
-        onClick={signUp(userName, password, email)}>
+        onClick={() => signUp(userName, password, email)}>
         Sign Up
       </button>
     </div>
   );
 
   function signUp(userName, password, email) {
-    console.log("Yunxiang name: ", userName);
-    console.log("Yunxiang email: ", email);
-    console.log("Yunxiang password: ", password);
-    
     var body = {
       username: userName,
       password: password,
       email: email
     };
-    axios.post('https://localhost:9000/signup', body)
-      .then(function (response) {
-        // if response == 'success' {
-        navigate('/sign-up-success-page', {
-          state: { username: userName }
-        });
-        // }
-      })
-      .catch(function (error) {
-        console.log("sign up request failed with error: ", error);
-      });
+    
+    axios.post('http://localhost:9000/signup', body)
+    .then(function (response) {
+        if (response.status == 200) {
+          navigate('/sign-up-success-page', {
+            state: { userName: userName }
+          })
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
   }
 }
 

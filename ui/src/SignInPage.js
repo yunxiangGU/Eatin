@@ -27,31 +27,29 @@ export default function SignInPage() {
         placeholder='password'
         onChange={(e) => setPassword(e.target.value)}></input>
       <button className='sign-in-button' 
-        onClick={signIn(userName, password)}>
+        onClick={() => signIn(userName, password)}>
         Sign In
       </button>
     </div>
   );
 
-  function signIn(userName, password) {
-    console.log("Yunxiang name: ", userName);
-    console.log("Yunxiang password: ", password);
-    
+  function signIn(userName, password) {    
     var body = {
       username: userName,
       password: password
     };
-    axios.post('https://localhost:9000/login', body)
-      .then(function (response) {
-        // if response == 'success' {
-        navigate('/sign-in-success-page', { 
-          state: { userName: userName } 
-        });
-        // }
-      })
-      .catch(function (error) {
-        console.log("sign in request failed with error: ", error);
-      });
+
+    axios.post('http://localhost:9000/login', body)
+    .then(function (response) {
+      if (response.status == 200) {
+        navigate('/sign-in-success-page', {
+          state: { userName: userName }
+        })
+      }
+    })
+    .catch(function (error) {
+      console.log("sign in request failed with error: ", error);
+    });
   }
 }
 
