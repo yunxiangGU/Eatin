@@ -1,0 +1,59 @@
+.sign-in-page {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.App-header {
+    display: flex;
+    padding-left: 40px;
+    overflow: auto;
+  }
+
+.App-name {
+    padding-left: 10px;
+    font-family: 'Alfa Slab One';
+    font-size: 48px;
+    align-self: center;
+    color: #FF5722;
+}
+
+img {
+    cursor: grab;
+}
+
+.name-label {
+    padding: 10px;
+    padding-top: 50px;
+    font-family: 'Alfa Slab One';
+    font-size: 24px;
+}
+
+.name-field {
+    border-radius: 10px; 
+}
+
+.password-label {
+    padding: 10px;
+    padding-top: 30px;
+    font-family: 'Alfa Slab One';
+    font-size: 24px;
+}
+
+.password-field {
+    border-radius: 10px; 
+}
+
+.sign-in-button {
+    font-family: 'Alfa Slab One';
+    font-size: 20px;
+    color: #FFFFFF;
+    background-color: #FF5722;
+    width: 110px;
+    height: 45px;
+    border-radius: 10px;
+    border-width: 0px;
+    align-self: center;
+    margin: 20px;
+    cursor: grab;
+}

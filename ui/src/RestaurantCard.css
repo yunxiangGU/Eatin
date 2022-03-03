@@ -1,0 +1,31 @@
+.card {
+    width: 270px;
+    height: 270px;
+    border-style: solid;
+    border-color: #BDBDBD;
+    border-radius: 10px;
+    border-width: 3px;
+    margin: 25px;
+}
+
+.restaurant-image {
+    width: 270px;
+    height: 150px;
+    background-image: url('assets/restaurant_image.png');
+}
+
+.restaurant-name {
+    font-family: 'Alfa Slab One';
+    font-size: 16px;
+    margin: 20px;
+    margin-left: 35px;
+}
+
+.restaurant-info {
+    overflow: hidden;
+    font-family: 'Alfa Slab One';
+    font-size: 12px;
+    color: #BDBDBD;
+    width: 240px;
+    margin: 20px;
+}

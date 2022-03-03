@@ -1,0 +1,39 @@
+.sign-up-page {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.App-header {
+    display: flex;
+    padding-left: 40px;
+    overflow: auto;
+  }
+
+.App-name {
+    padding-left: 10px;
+    font-family: 'Alfa Slab One';
+    font-size: 48px;
+    align-self: center;
+    color: #FF5722;
+}
+
+img {
+    cursor: grab;
+}
+
+.welcome {
+    padding-top: 60px;
+    font-family: 'Alfa Slab One';
+    font-size: 48px;
+    align-self: center;
+    color: #FF5722;
+}
+
+.add-prompt {
+    padding-top: 20px;
+    font-family: 'Arial';
+    font-size: 20px;
+    align-self: center;
+    color: #000000;
+}
