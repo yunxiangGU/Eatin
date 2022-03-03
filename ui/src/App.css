@@ -1,0 +1,114 @@
+.App-header {
+  display: flex;
+  padding-left: 40px;
+  overflow: auto;
+}
+
+.App-logo {
+  padding-top: 5px;
+}
+
+.App-name {
+  padding-left: 10px;
+  font-family: 'Alfa Slab One';
+  font-size: 48px;
+  align-self: center;
+  color: #FF5722;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding-right: 40px;
+}
+
+.sign-up-button {
+  font-family: 'Alfa Slab One';
+  font-size: 20px;
+  color: #FFFFFF;
+  background-color: #FF5722;
+  width: 110px;
+  height: 45px;
+  border-radius: 10px;
+  border-width: 0px;
+  align-self: center;
+  margin: 5px;
+  cursor: grab;
+}
+
+.sign-in-button {
+  font-family: 'Alfa Slab One';
+  font-size: 20px;
+  color: #ACACAC;
+  background-color: #FFFFFF;
+  width: 110px;
+  height: 45px;
+  border-radius: 10px;
+  align-self: center;
+  margin: 5px;
+  cursor: grab;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7),rgba(0, 0, 0, 0.7)), url('assets/banner.png');
+  padding: 50px;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  display: flex;
+  font-family: 'Alfa Slab One';
+  font-size: 48px;
+  color: #FF5722;
+  max-width: fit-content;
+  padding: 20px;
+}
+
+.selections {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 50px;
+}
+
+input {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+.pax-input {
+  width: 140px;
+}
+
+.body-search-button {
+  font-family: 'Alfa Slab One';
+  font-size: 20px;
+  color: #FFFFFF;
+  background-color: #FF5722;
+  width: 110px;
+  height: 45px;
+  border-radius: 10px;
+  border-width: 0px;
+  align-self: center;
+  margin: 5px;
+  cursor: grab;
+}
+
+.restaurants {
+  display: flex;
+  padding-top: 55px;
+  padding-left: 55px;
+  padding-right: 55px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
