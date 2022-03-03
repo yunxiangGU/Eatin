@@ -56,7 +56,7 @@ class OpenHoursRepository @Inject()(implicit ex: ExecutionContext) {
     }
   }
 
-  def searchByRestId(openId: Long): Future[Option[OpenHours]] = {
+  def searchByOpenId(openId: Long): Future[Option[OpenHours]] = {
     db.run {
       openQuery.filter(_.openId === openId).result.map( rSet =>
         rSet.headOption.map(

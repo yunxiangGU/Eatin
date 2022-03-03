@@ -8,8 +8,18 @@ GET     /                           controllers.HomeController.index()
 +nocsrf
 POST     /login                     controllers.UserController.login()
 POST     /updatePassword             controllers.UserController.updatePassword()
-POST     /signup                      controllers.UserController.signup()
-
+POST     /signup                      controllers.UserController.signUp()
++nocsrf
+POST     /booking                     controllers.ReservationController.makeReservation()
++nocsrf
+POST     /check                       controllers.ReservationController.checkAvail()
++nocsrf
+POST    /test                         controllers.ReservationController.test()
++nocsrf
+POST    /addRest                        controllers.RestaurantController.addRestaurant()
++nocsrf
+POST    /test                         controllers.ReservationController.test()
+GET    /getRestList                   controllers.RestaurantController.getRestList()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

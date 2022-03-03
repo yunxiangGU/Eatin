@@ -32,7 +32,7 @@ class RestaurantRepository @Inject()(implicit ex: ExecutionContext) {
 
     def tables = column[Int]("tables")
 
-    def restType = column[String]("restType")
+    def restType = column[String]("rest_type")
 
     /*
     table default projection
@@ -79,6 +79,13 @@ searchRestaurantByType
       restQuery.filter(_.restId === restId).map(_.name).update(newName)
     )
   }
+  def getRestList: Future[List[Restaurant]] = {
+    db.run(
+      restQuery.take(10).result.map{ rSet =>
+        rSet.toList
+      }
+    )
+  }
 
   def searchByRestId(restId: Long): Future[Option[Restaurant]] = {
     db.run {
@@ -114,4 +121,8 @@ searchRestaurantByType
         ))
     }
   }
+  def close(): Future[Unit] = {
+    Future.successful(db.close())
+  }
+
 }

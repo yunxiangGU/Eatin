@@ -53,7 +53,7 @@ searchReservationByName
 searchReservationByAddress
 searchReservationByType
    */
-  def addReservation(dateTime: String, restId: Long, userid: Long, duration: Int, status: Int): Future[Reservation] = {
+  def addReservation(userid: Long, restId: Long, dateTime: String, duration: Int, status: Int): Future[Reservation] = {
     db.run {
       (restQuery.map(r => (r.datetime, r.restId, r.userid, r.duration, r.status))
         returning restQuery.map(_.reserveId)

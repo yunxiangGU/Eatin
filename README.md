@@ -39,7 +39,7 @@ CREATE TABLE `eatin`.`restaurant` (
 
 ```sql
 CREATE TABLE `eatin`.`open_hours` (
-  `open_id` INT NOT NULL,
+  `open_id` INT NOT NULL AUTO_INCREMENT ,
   `breakfast` TINYINT NOT NULL,
   `lunch` TINYINT NOT NULL,
   `dinner` TINYINT NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE `eatin`.`open_hours` (
 
 ```sql
 CREATE TABLE `eatin`.`reservation` (
-  `reserve_id` INT NOT NULL,
+  `reserve_id` INT NOT NULL AUTO_INCREMENT,
   `datetime` DATETIME NOT NULL,
   `rest_id` INT NOT NULL,
   `userid` INT NOT NULL,

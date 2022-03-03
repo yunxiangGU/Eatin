@@ -1,7 +1,7 @@
 package controllers
 
 import play.api.libs.json.Json
-import play.api.mvc.{AbstractController, Action, AnyContent, BaseController, ControllerComponents, Cookie}
+import play.api.mvc.{AbstractController, Action, AnyContent, BaseController, ControllerComponents, Cookie, DiscardingCookie}
 import repository.UserRepository
 
 import javax.inject.{Inject, Singleton}
@@ -26,7 +26,8 @@ class UserController @Inject() (val userRepository: UserRepository,
         userRepository.searchUserByUsername(loginReq.username).flatMap {
           u => if (u.getOrElse(throw new IllegalArgumentException("no such user")).password == loginReq.password) {
             // todo: use random value as cookie value
-            Future.successful(Ok("success").withCookies(Cookie(SESSION_TOKEN_NAME, "123", maxAge = Some(Duration(1, DAYS).toSeconds.toInt))))
+            Future.successful(Ok("success")
+              .withSession((SESSION_TOKEN_NAME, u.get.userId.toString)))
           } else {
             Future.successful(Ok("incorrect userid/password"))
           }
@@ -39,16 +40,22 @@ class UserController @Inject() (val userRepository: UserRepository,
       }
     )
     }
-  def signUp(): Action[AnyContent] = { Action.async {
-    request => try {
-      val reqJson = request.body.asJson.getOrElse(throw new IllegalArgumentException("illegal request for update password"))
-      val signUpReq = reqJson.asOpt[SignUpReq].getOrElse(throw new IllegalArgumentException("invalid format of username"))
-      /* Assume front end jQuery only allow unique username */
-      userRepository.addUser(signUpReq.username, signUpReq.password, signUpReq.email, "normal")
-      Future.successful(Ok("sign up success"))
+  def signUp(): Action[AnyContent] = {
+    Action.async {
+      request =>
+        try {
+          val reqJson = request.body.asJson.getOrElse(throw new IllegalArgumentException("illegal request for update password"))
+          val signUpReq = reqJson.asOpt[SignUpReq].getOrElse(throw new IllegalArgumentException("invalid format of username"))
+          /* Assume front end jQuery only allow unique username */
+          userRepository.addUser(signUpReq.username, signUpReq.password, signUpReq.email, "normal")
+          Future.successful(Ok("sign up success"))
+        }
     }
   }
-  }
+  def logout(): Action[AnyContent] = {Action { _ =>
+    Ok("logout successful!").withNewSession
+  }}
+
     def updatePassword(): Action[AnyContent] = { authAction.async {
       request => try {
         val reqJson = request.body.asJson.

@@ -31,8 +31,13 @@ class UserRepositoryTest extends MySQLRepoSpec {
   "User repo" should {
     "add a new user" in {
       val result: User = Await.result(userRepo.addUser(
-        "yifan", "123", "gmail", "admin")
+        "emily", "321", "gmail", "normal")
         , Duration(60, SECONDS))
+      assert(result.email == "gmail")
+    }
+    "search a new user" in {
+      val result: User = Await.result(userRepo.searchUserByUsername("yifan")
+        , Duration(5, SECONDS)).get
       assert(result.email == "gmail")
     }
   }
