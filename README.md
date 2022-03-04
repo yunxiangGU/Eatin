@@ -1,7 +1,38 @@
 # Eatin
 IT5100A Course Project
+## Run Eatin!
 
-## Database:
+We chose to focus on back-end while also offer some front-end features implemented by React. To start this project, you should first clone this repository from https://github.com/yunxiangGU/Eatin:
+
+```sh
+git clone https://github.com/yunxiangGU/Eatin.git
+cd Eatin
+```
+
+The project structure is classic Play structure with a front-end `ui` folder. To start the web application, back-end and front-end services should both be started successfully. In addition, we use MySQL as persistent storage so the corresponding database and tables need to be initialised as **Appendix(a)** described. To connect the local database successfully, the following part of `conf/application.conf` need to be modified to valid values:
+
+```scala
+slick.dbs.default.db.user="root"
+slick.dbs.default.db.password="pass"
+```
+
+To start backend, use `sbt` (`Java version 8 or 11`).
+
+```sh
+sbt compile
+sbt run
+```
+
+To start frontend, `npm` required.
+
+```sh
+npm install
+npm run start
+```
+
+By default, back end will start on port 9000, while front end will start on port 3000.
+# Appendix
+## a. Database:
 
 
 1. User
