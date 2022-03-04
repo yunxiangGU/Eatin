@@ -6,26 +6,40 @@ import repository.{OpenHoursRepository, ReservationRepository, RestaurantReposit
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
+import scalacache._
+import scalacache.guava._
+import scalacache.memoization._
+import scala.concurrent.duration._
+import scalacache.modes.scalaFuture._
+import com.google.common.cache.CacheBuilder
+
+
 class CheckAvailService @Inject()(restRepo: RestaurantRepository,
                                   reserveRepo: ReservationRepository,
                                   openHoursRepo: OpenHoursRepository)(implicit ec: ExecutionContext){
-  def checkAvail(restId: Long, datetime: String): Future[Boolean] = {
-    restRepo.searchByRestId(restId).flatMap {
-      case restOpt:Some[Restaurant] =>
-        val rest = restOpt.get
-        openHoursRepo.searchByOpenId(rest.openId).flatMap {
-          openHoursOpt => {
-            reserveRepo.countConflict(restId, datetime).flatMap { count =>
-              val oh = openHoursOpt.get
-              val time = datetime.split(" ")(1)
-              val open: Boolean = (oh.lunch && time >= oh.lStart && time < oh.lEnd) || (oh.dinner && time >= oh.dStart && time < oh.dEnd)
-              val emptyTable = count < rest.tables
-              Future.successful(open && emptyTable)
+  val underlyingGuavaCache = CacheBuilder.newBuilder().maximumSize(10000L).build[String, Entry[Boolean]]
+  implicit val guavaCache: Cache[Boolean] = GuavaCache(underlyingGuavaCache)
+  def checkAvail(restId: Long, datetime: String): Future[Boolean] =
+    memoizeF[Future, Boolean](Some(10.seconds)) {
+      restRepo.searchByRestId(restId).flatMap {
+        case restOpt: Some[Restaurant] =>
+          val rest = restOpt.get
+          openHoursRepo.searchByOpenId(rest.openId).flatMap {
+            openHoursOpt => {
+              reserveRepo.countConflict(restId, datetime).flatMap { count =>
+                val oh = openHoursOpt.get
+                val time = datetime.split(" ")(1)
+                val open: Boolean = (oh.lunch && time >= oh.lStart && time < oh.lEnd) || (oh.dinner && time >= oh.dStart && time < oh.dEnd)
+                val emptyTable = count < rest.tables
+                Future.successful(open && emptyTable)
+              }
             }
           }
-        }
-      case None => Future.successful(false)
+        case None => Future.successful(false)
+      }
     }
+
+
 
 //    for {
 //      openHours <- openHoursRepo.searchByRestId(restId)
@@ -39,5 +53,5 @@ class CheckAvailService @Inject()(restRepo: RestaurantRepository,
 //      val emptyTable = countConflict < r.tables
 //      open && emptyTable
 //    }
-  }
+
 }

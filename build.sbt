@@ -14,6 +14,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-slick" % "5.0.0",
   "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
   "com.h2database" % "h2" % "1.4.199",
+  "com.github.cb372" %% "scalacache-core" % "0.28.0",
+  "com.github.cb372" %% "scalacache-guava" % "0.28.0",
 )
 
 // Adds additional packages into Twirl
