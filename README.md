@@ -1,5 +1,26 @@
 # Eatin
 IT5100A Course Project
+## Contribution
+
+| contribution                              | member                   |
+| ----------------------------------------- | ------------------------ |
+| Design                                    | Huang Yifan, Gu Yunxiang |
+| Repositories (Slick & Database Interface) | Huang Yifan              |
+| Models and Controllers                    | Huang Yifan              |
+| Front End, React Components               | Gu Yunxiang              |
+| Cache                                     | Han Siyu                 |
+| Report                                    | Huang Yifan, Gu Yunxiang |
+
+
+
+## Background
+
+Eatin is an online restaurant reservation, which aims to offer both customers and restaurants a place to manage their reservations. On customer side, they can search, filter, and make bookings simply on the same web page. On merchant side, they are able to utilise our management system to better organise their reservation data.
+
+Since this is a classic web application, we are using Play framework with Scala to organise our projects. In terms of data storage, we are going to use MySql database for long-lasting data, and Redis for caching availability data. For front-end, we are using React framework to make best use of existing libraries and better encapsulate components.
+
+Because the time is limited for our project, we have implemented most of the basic features above while leaving rest of them for future.
+
 ## Run Eatin!
 
 We chose to focus on back-end while also offer some front-end features implemented by React. To start this project, you should first clone this repository from https://github.com/yunxiangGU/Eatin:
@@ -31,7 +52,9 @@ npm run start
 ```
 
 By default, back end will start on port 9000, while front end will start on port 3000.
-# Appendix
+
+## Implementation Details
+
 ## a. Database:
 
 
@@ -100,7 +123,7 @@ CREATE TABLE `eatin`.`reservation` (
 
 ```
 
-## Repo
+## b.Repo
 ### UserRepository:  
 Write:
 - addUser
@@ -144,7 +167,7 @@ openhours.lunchStart <= x < openHours.lunchEnd || openhours.dinnerStart <= x < o
 ```
 
 
-## Service
+## c. Service
 ### ReservationService:
 - addReservation: logic before make reservation
 ### UserService:
@@ -155,7 +178,7 @@ openhours.lunchStart <= x < openHours.lunchEnd || openhours.dinnerStart <= x < o
 ### ReservationService:
 - if enough time: batch addReservation from csv file for restaurants with their own service/database
 
-## Controller
+## d. Controller
 #### BackEnd API:
 ##### Sign up: 
 - path: /signup
