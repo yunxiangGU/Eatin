@@ -237,6 +237,25 @@ openhours.lunchStart <= x < openHours.lunchEnd || openhours.dinnerStart <= x < o
 ```
 - response: true or false
 
+##### Search Restaurants
+
+- Path:/search?keyword=xxx
+- Method: GET
+- Response sample Json
+
+```json
+[{"restId":1,"userid":1,"openId":1,"name":"wokhey","desc":"goodrice","address":"clementi","phone":"12345678","tables":2,"restType":"asian"},
+  {"restId":2,"userid":4,"openId":2,"name":"happy family","desc":"Asian food for family gathering","address":"388 PeekWay","phone":"86259087","tables":20,"restType":"Asian"}]
+```
+
+##### Search Restaurants with criteria
+
+- Path1: /searchByName?name=xxx
+- Path2: /searchByAddress?address=xxx
+- Path3: /searchByType?type=xxx
+- Method: GET
+- Sample response Json is same as search by keywords. 
+
 ##### Make Reservation
 - path: /addRest
 - method: POST
