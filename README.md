@@ -299,6 +299,8 @@ We use `React` library for implementing web front end. Our prototype website has
 - Sign In Success Page
 - Sign Up Page
 - Sign Up Success Page
+- ![](ui/sample/search.png)
+- ![](ui/sample/welcome-back.png)
 
 Users would expect to be landed on home page, where there will be two buttons: sign up, and sign in, on the header bar. Each button will take the user to the corresponding page.
 
