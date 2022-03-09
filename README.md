@@ -290,7 +290,40 @@ openhours.lunchStart <= x < openHours.lunchEnd || openhours.dinnerStart <= x < o
     "datetime":"2022-3-22 12:00:00"
 }
 ```
+### Front End Implementation
 
+We use `React` library for implementing web front end. Our prototype website has five webpages, navigation implemented with `react router`, to be scaled in the future.
+
+- Home Page
+- Sign In Page
+- Sign In Success Page
+- Sign Up Page
+- Sign Up Success Page
+
+Users would expect to be landed on home page, where there will be two buttons: sign up, and sign in, on the header bar. Each button will take the user to the corresponding page.
+
+On Sign In Page, users will be prompted to enter `username` and `password` to sign in. 
+
+If successful, users will be redirected to the Sign In Successful Page, where a `welcome back` message will be displayed.
+
+Also, we prompted users to click on the Xiao Long Bao icon to go back to home page.
+
+Sign Up Page is quite similar to Sign In Page, but with an extra field to provide the user's `email` other than `username` and `password`. The message upon success sign up is `welcome`, instead of `welcome back`.
+
+On home page, users can perform search based on their conditions: dining time, number of pax, and keyword search. Now only keyword search is implemented on front end, but the back end logic is complete. When users type in keywords (e.g., 'asian', or '100 Orchard Road', or 'Wok Hey'), we send a `get` request to backend with `keyword` parameters in URL. The back end will respond with an array of all restaurants (up to 10 records) meeting the filter requirement. Then all these result restaurants will be displayed at the bottom of the home page as several `RestaurantCard` components, which are scrollable horizontally.
+
+
+
+## Future Plan
+
+Front End (some functionalities existing in back end but pending on front end): 
+
+- More search filtering logic in dining time and number of pax
+- users should be able to add their own business (restaurant), along with information (address, cuisine type, phone number, number of available tables, etc.), since they could be business owners other than customers
+- users should be able to click on a `RestaurantCard` component and be redirected to the detailed info page about that restaurant
+- on that detail page, users should be able to make reservations for that restaurant
+- users should be able to update their information (password, email, etc.) after successful login
+- restaurant owners should be able to update their restaurant information (name, description, etc.) after successful login
 ## UI run
 ```shell
 npm install
