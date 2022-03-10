@@ -2,7 +2,7 @@ package controllers
 
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, Action, AnyContent, BaseController, ControllerComponents, Cookie}
-import repository.{ReservationRepository, UserRepository}
+import repository.{ReservationRepository, RestaurantRepository, UserRepository}
 import service.CheckAvailService
 import utils.JsonUtil
 
@@ -16,6 +16,7 @@ case class CheckAvailReq(restId: Long, datetime: String)
 @Singleton
 class ReservationController @Inject() (val reserveRepo: ReservationRepository,
                                        val checkAvailService : CheckAvailService,
+                                       val restaurantRepository: RestaurantRepository,
                                        val authAction: ProtectedAction,
                                        implicit val cc: ControllerComponents)
                                (implicit val ec: ExecutionContext) extends AbstractController(cc) {
@@ -55,6 +56,39 @@ class ReservationController @Inject() (val reserveRepo: ReservationRepository,
       }
   }
   }
+  def searchReservationByUserId(): Action[AnyContent] = authAction.async{request =>
+    request.userid.flatMap { userid =>
+      Future.successful(Ok(JsonUtil.toJson(reserveRepo.searchByUserid(userid))))
+    }.recover {
+      case t: Throwable => InternalServerError("unknown error")
+    }
+  }
+
+  def cxlReservation(reserveId: Long): Action[AnyContent] = authAction.async { request =>
+    request.userid.flatMap { userid => {
+      reserveRepo.searchByUserid(userid).flatMap { reserveList =>
+        reserveList.filter(_.reserveId == reserveId).map { r =>
+          reserveRepo.updateStatus(r.reserveId, 0)
+        }
+        Future.successful(Ok("done"))
+      }
+    }
+    }
+  }
+  /**
+   * below is for:
+   * support for restaurant user
+   */
+    def searchReservationByRestaurantId(restId: Long) :Action[AnyContent] = authAction.async {request =>
+      request.userid.flatMap { userid =>
+        val restLst = restaurantRepository.searchByUserId(userid)
+        Future.successful(Ok(JsonUtil.toJson(restLst.map { lst =>
+          lst.filter(_.restId == restId)
+        })))
+      }
+    }
+
+
   def test() : Action[AnyContent] = {
     authAction.async { requestWithUserInfo =>
       requestWithUserInfo.userid.flatMap {

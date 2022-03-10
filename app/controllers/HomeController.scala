@@ -23,12 +23,12 @@ class HomeController @Inject()(val userRepository: UserRepository,
    * a path of `/`.
    */
   def index() = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.index())
+    Ok("yeah")
   }
-
-  def addUser() = Action { implicit request: Request[AnyContent] =>
-    val res = userRepository.addUser("1", "2", "3", "4")
-    Await.result(res, Duration(60,SECONDS))
-    Ok("OK")
-  }
+//
+//  def addUser() = Action { implicit request: Request[AnyContent] =>
+//    val res = userRepository.addUser("1", "2", "3", "4")
+//    Await.result(res, Duration(60,SECONDS))
+//    Ok("OK")
+//  }
 }

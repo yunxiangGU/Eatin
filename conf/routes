@@ -23,11 +23,14 @@ POST    /test                         controllers.ReservationController.test()
 POST    /addRest                        controllers.RestaurantController.addRestaurant()
 +nocsrf
 POST    /test                         controllers.ReservationController.test()
+GET    /cxl                           controllers.ReservationController.cxlReservation(reserveId: Long)
+GET    /getMyRestReserve              controllers.ReservationController.searchReservationByRestaurantId(restId: Long)
+GET    /getMyReserve                  controllers.ReservationController.searchReservationByUserId()
 GET    /getRestList                   controllers.RestaurantController.getRestList()
 GET    /searchByName                  controllers.RestaurantController.searchRestaurantByName(name: String)
 GET    /searchByAddress               controllers.RestaurantController.searchRestaurantByAddress(address: String)
 GET    /searchByType                  controllers.RestaurantController.searchRestaurantByRestType(restType: String)
 GET    /search                        controllers.RestaurantController.searchRestaurantGenerally(keyword: String)
-
+GET    /searchMyRestaurant            controllers.RestaurantController.searchMyRestaurant()
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

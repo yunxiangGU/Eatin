@@ -33,7 +33,10 @@ class UserController @Inject() (val userRepository: UserRepository,
           }
         }
       } catch {
-        case e: IllegalArgumentException => Future(BadRequest(e.getMessage))
+        case e: IllegalArgumentException => {
+          println("1233211")
+          Future(BadRequest(e.getMessage))
+        }
         case t: Throwable =>
           println(t.getMessage)
           Future(InternalServerError("uncaught error"))

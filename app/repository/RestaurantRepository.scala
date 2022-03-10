@@ -130,6 +130,11 @@ class RestaurantRepository @Inject()(configProvider: DatabaseConfigProvider)(imp
         restQuery.filter(_.restType.toLowerCase like s"%${restType}%".toLowerCase() ).result.map(_.toList)
       }
   }
+
+  def searchByUserId(userId: Long): Future[List[Restaurant]] =
+    db.run {
+      restQuery.filter(_.userid === userId).result.map(_.toList)
+    }
   def close(): Future[Unit] = {
     Future.successful(db.close())
   }

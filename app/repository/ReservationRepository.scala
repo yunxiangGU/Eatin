@@ -64,21 +64,15 @@ private val dbConfig: DatabaseConfig[JdbcProfile] = configProvider.get[JdbcProfi
         ))
     }
   }
-  def searchByUserid(userid: Long): Future[Option[Reservation]] = {
+  def searchByUserid(userid: Long): Future[List[Reservation]] = {
     db.run {
-      restQuery.filter(_.userid === userid).result.map( rSet =>
-        rSet.headOption.map(
-          r => Reservation(r.reserveId, r.dateTime, r.restId, r.userid, r.duration, r.status)
-        ))
+      restQuery.filter(_.userid === userid).result.map(_.toList)
     }
   }
 
-  def searchByRestId(restId: Long): Future[Option[Reservation]] = {
+  def searchByRestId(restId: Long): Future[List[Reservation]] = {
     db.run {
-      restQuery.filter(_.restId === restId).result.map( rSet =>
-        rSet.headOption.map(
-          r => Reservation(r.reserveId, r.dateTime, r.restId, r.userid, r.duration, r.status)
-        ))
+      restQuery.filter(_.restId === restId).result.map(_.toList)
     }
   }
   def countConflict(restId: Long, startTime: String): Future[Int] = {
