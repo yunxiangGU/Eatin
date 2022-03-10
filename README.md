@@ -54,8 +54,21 @@ npm run start
 By default, back end will start on port 9000, while front end will start on port 3000.
 
 ## Implementation Details
+#### a. DB Connection
 
-## a. Database:
+Slick is a Scala library for database access and query with static check during compile time. This library enables us to use the handy functions of Scala collections. We implements auth-increment insertion, update, search, count methods in repository package and then utilize these methods to implement check availability service. Since we only deploy this project locally, to simplify the project, we use plain text in configuration to specify all the DB configuration including url and password. An encryption of passoword can be applied for future needs. 
+
+##### b. Architecture
+
+To better separate the different logic in different layers, we only keep basic search, update & insert logics in repository package. Since `checkAvail` needs several results from different repositories, we implement `checkAvailService`  to separately complete the needs to check availability for each restaurant. Specifically, we inject related repositories including Restaurant, OpenHours and Reservations to obtain the availability information and then cache the result to reduce the cost for frequent checking.
+
+##### c. Controllers
+
+For now we implement all the basic controllers with functions including sign up, login, log out, search restaurant, filter by name, address and type, add reservation and check availability. To recogonize the current user identity, we rewrite `Action` to with session information to authorize users. All the functions with `authAction` will need a login information to succeed. 
+
+## Appendix
+
+### a. Database:
 
 
 1. User
@@ -123,7 +136,7 @@ CREATE TABLE `eatin`.`reservation` (
 
 ```
 
-## b.Repo
+### b.Repo
 ### UserRepository:  
 Write:
 - addUser
@@ -178,7 +191,7 @@ openhours.lunchStart <= x < openHours.lunchEnd || openhours.dinnerStart <= x < o
 ### ReservationService:
 - if enough time: batch addReservation from csv file for restaurants with their own service/database
 
-## d. Controller
+### d. Controller
 #### BackEnd API:
 ##### Sign up: 
 - path: /signup
