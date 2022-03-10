@@ -9,6 +9,13 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
+import scalacache._
+import scalacache.guava._
+import scalacache.memoization._
+import scala.concurrent.duration._
+import scalacache.modes.scalaFuture._
+import com.google.common.cache.CacheBuilder
+
 @Singleton
 class RestaurantRepository @Inject()(configProvider: DatabaseConfigProvider)(implicit ex: ExecutionContext) {
   //private val dbConfig: DatabaseConfig[JdbcProfile] = DatabaseConfig.forConfig[JdbcProfile]("mydb")
@@ -97,24 +104,31 @@ class RestaurantRepository @Inject()(configProvider: DatabaseConfigProvider)(imp
       ))
     }
   }
-  def searchByName(name: String): Future[List[Restaurant]] = {
-    db.run {
-      restQuery.filter(_.name.toLowerCase like s"%${name}%".toLowerCase()).take(5).result.map {
-          _.toList
-        }
-    }
+
+  val underlyingGuavaCache = CacheBuilder.newBuilder().maximumSize(10000L).build[String, Entry[List[Restaurant]]]
+  implicit val guavaCache: Cache[List[Restaurant]] = GuavaCache(underlyingGuavaCache)
+
+  def searchByName(name: String): Future[List[Restaurant]] = 
+    memoizeF[Future, List[Restaurant]](Some(10.seconds)) {
+      db.run {
+        restQuery.filter(_.name.toLowerCase like s"%${name}%".toLowerCase()).take(5).result.map {
+            _.toList
+          }
+      }
   }
 
-  def searchByAddress(address: String): Future[List[Restaurant]] = {
-    db.run {
-      restQuery.filter(_.address.toLowerCase like s"%${address}%".toLowerCase() ).result.map(_.toList)
-    }
+  def searchByAddress(address: String): Future[List[Restaurant]] = 
+    memoizeF[Future, List[Restaurant]](Some(10.seconds)) {
+      db.run {
+        restQuery.filter(_.address.toLowerCase like s"%${address}%".toLowerCase() ).result.map(_.toList)
+      }
   }
 
-  def searchByType(restType: String): Future[List[Restaurant]] = {
-    db.run {
-      restQuery.filter(_.restType.toLowerCase like s"%${restType}%".toLowerCase() ).result.map(_.toList)
-    }
+  def searchByType(restType: String): Future[List[Restaurant]] = 
+    memoizeF[Future, List[Restaurant]](Some(10.seconds)) {
+      db.run {
+        restQuery.filter(_.restType.toLowerCase like s"%${restType}%".toLowerCase() ).result.map(_.toList)
+      }
   }
   def close(): Future[Unit] = {
     Future.successful(db.close())
