@@ -68,7 +68,7 @@ class ReservationController @Inject() (val reserveRepo: ReservationRepository,
     request.userid.flatMap { userid => {
       reserveRepo.searchByUserid(userid).flatMap { reserveList =>
         reserveList.filter(_.reserveId == reserveId).map { r =>
-          reserveRepo.updateStatus(r.reserveId, 0)
+          reserveRepo.updateStatus(r.reserveId, 1)
         }
         Future.successful(Ok("done"))
       }

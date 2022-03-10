@@ -127,7 +127,10 @@ class RestaurantController @Inject() (val restaurantRepository: RestaurantReposi
    */
   def searchMyRestaurant(): Action[AnyContent] = {authAction.async{ request =>
     request.userid.flatMap { userid =>
-      Future.successful(Ok(JsonUtil.toJson(restaurantRepository.searchByUserId(userid))))
+      val lst = restaurantRepository.searchByUserId(userid).map(x => x)
+      Future.successful(Ok(JsonUtil.toJson(
+        lst
+      )))
     }
   }}
 }
